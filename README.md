@@ -49,7 +49,7 @@ PantryOS is built around a **Silicon Labs SIWG917 MCU** on a custom PCBA, which 
 
 The system allows users to scan items, log expiration dates, and monitor pantry conditions through a connected dashboard.
 
-![System Block Diagram] <img width="902" height="775" alt="image" src="https://github.com/user-attachments/assets/1e71f5dc-4312-4363-989c-03eee429c7f8" />
+<img width="902" height="775" alt="image" src="https://github.com/user-attachments/assets/1e71f5dc-4312-4363-989c-03eee429c7f8" />
 
 ---
 
