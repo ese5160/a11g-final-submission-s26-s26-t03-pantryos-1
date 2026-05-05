@@ -119,15 +119,30 @@ https://upenn-eselabs.365.altium.com/designs/folder-DC856870-9335-4574-956F-E6FD
 
 ## 3. Hardware & Software Requirements
 
+Remember those hardware and software requirements from earlier in the semester? It's now time to review if you hit those requirements or if you fell short. Go through each requirement and show if you met it or not.
+
+You’ll need to do validation testing to check these requirements. For example, if I wanted to validate my temperature sensor accuracy, I would compare it to a more accurate temperature measurement tool (say, a thermocouple attached to a multimeter). Then, I’d find the error between my device and the tool.
+
+Be honest with your requirements review period you will not lose points if you did not hit the requirements metrics as outlined. However, you must discuss how you tested these requirements and present data.
+
+---
+
+## Hardware Requirements
+
 ---
 
 ### HRS-01 MCU
 
-The system shall use SIWG917Y121MGABA as the primary microcontroller...
+**Description:**  
+The system shall use SIWG917Y121MGABA as the primary microcontroller. The MCU shall support execution of FreeRTOS.  
+The MCU shall expose the following hardware interfaces:  
+- I2C (for sensors and RFID reader)  
+- PWM (for servo control)  
+- Debug/programming interface (SWD/JTAG and/or UART)  
+The MCU shall support concurrent operation of sensing, actuation, and wireless communication (BLE and Wi-Fi).
 
 **Validation:**  
-- Verified FreeRTOS execution  
-- Verified I2C, PWM, and debugging interfaces  
+Verified via FreeRTOS execution, sensor communication, PWM control, and RTT logging.
 
 <img src="images/requirements/mcu.jpg" width="300">
 
@@ -135,8 +150,29 @@ The system shall use SIWG917Y121MGABA as the primary microcontroller...
 
 ### HRS-02 Power System
 
-The system shall operate from a single-cell Li-Ion battery...
+**Description:**  
+The system shall operate from a single-cell Li-Ion battery.  
+- Nominal voltage: 3.7 V  
+- Capacity: 2200 mAh  
 
+The system shall support low-power sleep modes with wake sources including:  
+- Timer  
+- Barcode scan input  
+- Button press  
+
+The system shall include buck-boost or boost regulation to support peripherals requiring voltages above the battery nominal voltage (e.g., 5 V servo).  
+
+The system shall support both:  
+- Low-power mode (duty-cycled sensing and communication)  
+- Connected mode (continuous Wi-Fi/MQTT operation with higher power consumption)  
+
+Target power characteristics:  
+- Idle current (sleep + periodic sensing): ≤ 20 mA  
+- Peak current (Wi-Fi transmit + servo actuation): ≤ 300 mA  
+
+The system shall demonstrate a minimum runtime of 24 hours.  
+
+**Validation / Notes (your original wording):**  
 *** we had to use a power supply for 5V rail since we blew it out  
 - No low power states implemented  
 3.3 V boost✅  
@@ -144,6 +180,8 @@ The system shall operate from a single-cell Li-Ion battery...
 Power measurement (taken with an inline USB-C measuring device, which is verified with power supply readings)  
 - 38 mA, 0.196W nominal on USB-C  
 - 166 mA, 0.857W when barcode scanning on  
+
+Runtime??? With fluctuating current draws it is difficult to determine at this time. In the future, I would get more accurate power measurements using a Power Profiler.
 
 <img src="images/requirements/battery.jpg" width="250">
 <img src="images/requirements/nominal_current.jpg" width="250">
@@ -153,6 +191,22 @@ Power measurement (taken with an inline USB-C measuring device, which is verifie
 
 ### HRS-03 Sensors
 
+**Description:**  
+The system shall include at least one food-relevant environmental sensor connected via I2C.  
+
+Temperature Sensor:  
+- Measurement range: 0 °C to 50 °C  
+- Accuracy: ±0.5 °C  
+- Resolution: ≤ 0.1 °C  
+
+Humidity Sensor:  
+- Measurement range: 20%–90% RH  
+- Accuracy: ±3% RH  
+- Resolution: ≤ 1% RH  
+
+Sensor hardware shall support sampling at a rate of at least once per minute.  
+
+**Validation:**  
 Temperature and humidity sensor✅  
 
 <img src="images/requirements/temp_humidity_readings.png" width="300">
@@ -161,6 +215,12 @@ Temperature and humidity sensor✅
 
 ### HRS-04 Barcode Scanner
 
+**Description:**  
+The system shall include a barcode scanner for item identification.  
+The barcode scanner shall interface with the MCU via UART, USB, or equivalent.  
+The scanner shall provide decoded barcode data to the MCU.  
+
+**Validation:**  
 UART barcode scanner✅  
 
 <img src="images/requirements/barcode_scan.png" width="250">
@@ -170,6 +230,10 @@ UART barcode scanner✅
 
 ### HRS-05 Wireless Communication
 
+**Description:**  
+The system shall support wireless communication using BLE and Wi-Fi...  
+
+**Validation:**  
 Only used Wi-Fi  
 - Ran out of credits, so difficult to verify  
 
@@ -177,6 +241,16 @@ Only used Wi-Fi
 
 ### HRS-06 Actuation & Indicators
 
+**Description:**  
+The system shall include:  
+- A servo motor for actuation  
+- Status LEDs for user feedback  
+
+Requirements:  
+- Servo supply voltage: 5V  
+- Angular accuracy: ±5°  
+
+**Validation:**  
 Servo motor✅  
 - 5V from power supply  
 - Only updates when freshness value changes  
@@ -190,6 +264,10 @@ No status LEDs
 
 ### HRS-07 Debug & Programming
 
+**Description:**  
+The system shall include a hardware debug/programming port...  
+
+**Validation:**  
 Implemented Segger RTT  
 
 <img src="images/requirements/Segger_RTT.png" width="300">
@@ -198,6 +276,10 @@ Implemented Segger RTT
 
 ### HRS-08 Cost Constraint
 
+**Description:**  
+The cost of sensors and actuators shall be ≤ $30  
+
+**Validation:**  
 w/o barcode scanner: $4.79  
 W barcode scanner: $71.74  
 
@@ -209,7 +291,8 @@ W barcode scanner: $71.74
 
 ### SRS-01 Firmware Platform
 
-The firmware shall run on FreeRTOS...
+**Description:**  
+The firmware shall run on FreeRTOS...  
 
 <img src="images/requirements/free_rtos.png" width="300">
 
@@ -217,7 +300,8 @@ The firmware shall run on FreeRTOS...
 
 ### SRS-02 Tasking & Concurrency Model
 
-The system shall use an event-driven architecture...
+**Description:**  
+The system shall use an event-driven architecture...  
 
 <img src="images/requirements/logs.png" width="300">
 
@@ -225,6 +309,7 @@ The system shall use an event-driven architecture...
 
 ### SRS-03 Data Model & Persistence
 
+**Validation:**  
 Did not store inventory in nonvolatile memory  
 
 <img src="images/requirements/inventory_item_struct.png" width="300">
@@ -232,8 +317,6 @@ Did not store inventory in nonvolatile memory
 ---
 
 ### SRS-04 Barcode Scan Behavior
-
-Verified barcode scan → update  
 
 <img src="images/requirements/barcode_scan.png" width="250">
 
