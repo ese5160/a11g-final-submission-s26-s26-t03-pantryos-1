@@ -119,8 +119,6 @@ https://upenn-eselabs.365.altium.com/designs/folder-DC856870-9335-4574-956F-E6FD
 
 ## 3. Hardware & Software Requirements
 
----
-
 ## Hardware Requirements
 
 ---
