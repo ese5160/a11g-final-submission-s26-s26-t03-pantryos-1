@@ -119,6 +119,69 @@ https://upenn-eselabs.365.altium.com/designs/folder-DC856870-9335-4574-956F-E6FD
 
 ## 3. Hardware & Software Requirements
 
+We evaluated our system against the original hardware and software requirements and validated each component through testing.
+
+---
+
+### Hardware Requirements
+
+| ID | Requirement | Validation | Evidence | Result |
+|----|------------|------------|----------|--------|
+| **HRS-01 MCU** | SIWG917 MCU with FreeRTOS + interfaces | Verified via firmware execution, I2C, PWM, RTT logging | <img src="images/requirements/mcu.jpg" width="200"> | ✅ |
+| **HRS-02 Power** | Battery + 5V support + low power | Measured current (38 mA idle, 166 mA scanning) | <img src="images/requirements/battery.jpg" width="200"><br><img src="images/requirements/nominal_current.jpg" width="200"><br><img src="images/requirements/barcode_scan_current.jpg" width="200"> | ⚠️ |
+| **HRS-03 Sensors** | Temp + humidity via I2C | Verified via RTT logs | <img src="images/requirements/temp_humidity_readings.png" width="200"> | ✅ |
+| **HRS-04 Barcode** | UART barcode scanner | Verified scan → decode → log | <img src="images/requirements/barcode_scan.png" width="200"><br><img src="images/requirements/unknown_barcode.png" width="200"> | ✅ |
+| **HRS-05 Wireless** | BLE + Wi-Fi | Wi-Fi + MQTT working; BLE not implemented | — | ⚠️ |
+| **HRS-06 Actuation** | Servo + LEDs | Servo functional (external power), no LEDs | <img src="images/requirements/servo.jpg" width="200"><br><img src="images/requirements/servo_freshness_update.png" width="200"> | ⚠️ |
+| **HRS-07 Debug** | Logging + programming | SEGGER RTT logs verified | <img src="images/requirements/Segger_RTT.png" width="200"> | ✅ |
+| **HRS-08 Cost** | ≤ $30 | $71.74 with scanner | — | ❌ |
+
+---
+
+### Software Requirements
+
+| ID | Requirement | Validation | Evidence | Result |
+|----|------------|------------|----------|--------|
+| **SRS-01 Firmware** | FreeRTOS modular system | Verified task-based architecture | <img src="images/requirements/free_rtos.png" width="200"> | ✅ |
+| **SRS-02 Concurrency** | Event-driven architecture | Verified via task execution and logs | <img src="images/requirements/logs.png" width="200"> | ✅ |
+| **SRS-03 Persistence** | Data survives reset | Not implemented | — | ❌ |
+| **SRS-04 Barcode Logic** | Scan → update inventory | Verified via logs + system behavior | <img src="images/requirements/barcode_scan.png" width="200"><br><img src="images/requirements/inventory_item_struct.png" width="200"> | ✅ |
+| **SRS-05 BLE** | BLE support | Not implemented | — | ❌ |
+| **SRS-06 Sensors** | Sampling + freshness | Verified periodic readings | <img src="images/requirements/temp_humidity_readings.png" width="200"> | ✅ |
+| **SRS-07 Actuation** | Servo response | ~250 ms response time | <img src="images/requirements/servo_rtt.png" width="200"><br><img src="images/requirements/servo_freshness_update_nodered.png" width="200"> | ✅ |
+| **SRS-08 MQTT** | Publish + subscribe | Verified before Azure expired | <img src="images/requirements/logs.png" width="200"> | ⚠️ |
+| **SRS-09 Recipes** | Suggest meals | Not implemented | — | ❌ |
+| **SRS-10 Grocery List** | Generate list | Not implemented | — | ❌ |
+| **SRS-11 Low Power** | Sleep modes | Not implemented | — | ❌ |
+| **SRS-12 Logging** | Debug logs | Verified via RTT | <img src="images/requirements/logs.png" width="200"> | ✅ |
+
+---
+
+### Key Validation Results
+
+- **Power Consumption**
+  - Idle: ~38 mA  
+  - Scanning: ~166 mA  
+  - Measured using USB-C power meter  
+
+- **Barcode Performance**
+  - Scan latency: ~250 ms  
+  - Duplicate scans handled correctly  
+  - Unknown barcode handling verified  
+
+- **System Integration**
+  - Sensor + actuator + firmware integration verified  
+  - MQTT communication verified prior to Azure expiration  
+
+---
+
+### Takeaways
+
+- Core system functionality (sensing, scanning, actuation, Wi-Fi) was successfully implemented  
+- Hardware limitations—especially power delivery—significantly impacted design decisions  
+- Advanced features (BLE, persistence, low-power) remain future work  
+- Full-stack integration (hardware + firmware + cloud) is essential for reliable IoT systems  
+
 ## 4. Project Photos & Screenshots
 
 ## 5. Codebase
