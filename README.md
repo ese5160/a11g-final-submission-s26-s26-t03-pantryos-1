@@ -409,10 +409,96 @@ Logs verified
 
 ## 4. Project Photos & Screenshots
 
+### Final Device
+
+Your final project, including any casework or interfacing elements that make up the full project (3D prints, screens, buttons, etc)
+
+<img src="images/photos/final_device.jpg" width="400">
+
+---
+
+### PCBA
+
+**Top View**  
+<img src="images/photos/pcba_top.jpg" width="300">
+
+**Bottom View**  
+<img src="images/photos/pcba_bottom.jpg" width="300">
+
+---
+
+### Thermal Analysis
+
+Thermal camera images while the board is running under load (you may use your Board Bringup Thermal image here!)
+
+<img src="images/photos/thermal.jpg" width="400">
+
+---
+
+### PCB Design (Altium)
+
+**2D View**  
+<img src="images/photos/altium_2d.png" width="350">
+
+**3D View**  
+<img src="images/photos/altium_3d.png" width="350">
+
+---
+
+### Node-RED Interface
+
+**Dashboard (Frontend)**  
+<img src="images/photos/node_red_dashboard.png" width="400">
+
+**Backend**  
+(slightly outdated, this was the screenshot we took for A09, but this was the last time we took a backend screenshot, and we lost access to our server due to our Azure credits expiring)
+
+<img src="images/photos/node_red_backend.png" width="400">
+
+---
+
+### System Block Diagram
+
+Block diagram of your system (You may need to update this to reflect changes throughout the semester.)
+
+<img src="images/photos/block_diagram.png" width="500">
+
 ## 5. Codebase
 
-Do *not* commit any of your source code to this repository. Rather, provide links to the other GitHub repository you've already been using with your firmware.
+### Embedded Firmware
 
-- A link to your final embedded C firmware codebases
-- A link to your Node-RED dashboard code
-- Links to any other software required for the functionality of your device
+A link to your final embedded C firmware codebases:
+
+https://github.com/ese5160/final-project-firmware-s26-t03-pantryos/tree/main/ESE5160_Final_Project_Firmware/Final_Firmware
+
+---
+
+### Node-RED Dashboard
+
+A link to your Node-RED dashboard code:
+
+- Backend: http://172.212.177.245:1880/  
+- Dashboard: http://172.212.177.245:1880/ui  
+
+Please note, our Azure credits expired as of April 30, 2026, so you will not be able to see what it looked like unless we pay for a renewal.
+
+---
+
+### Supporting Software & Tools
+
+Links to any other software required for the functionality of your device:
+
+- Node-RED dashboard / flow host used for the web interface and MQTT-based user interaction  
+  https://nodered.org/
+
+- MQTT broker used for communication between the PCBA and the dashboard  
+  https://mosquitto.org/
+
+- Microsoft Azure cloud instance used to host the Node-RED / internet-facing software during the project  
+  https://azure.microsoft.com/
+
+- Simplicity Studio / Silicon Labs toolchain used to build and flash the firmware  
+  https://www.silabs.com/developers/simplicity-studio
+
+- SEGGER RTT / J-Link tools used for embedded debugging and runtime logging  
+  https://www.segger.com/products/debug-probes/j-link/technology/about-real-time-transfer/
