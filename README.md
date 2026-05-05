@@ -119,43 +119,193 @@ https://upenn-eselabs.365.altium.com/designs/folder-DC856870-9335-4574-956F-E6FD
 
 ## 3. Hardware & Software Requirements
 
-We evaluated our system against the original hardware and software requirements and validated each component through testing.
+---
+
+### HRS-01 MCU
+
+The system shall use SIWG917Y121MGABA as the primary microcontroller...
+
+**Validation:**  
+- Verified FreeRTOS execution  
+- Verified I2C, PWM, and debugging interfaces  
+
+<img src="images/requirements/mcu.jpg" width="300">
 
 ---
 
-### Hardware Requirements
+### HRS-02 Power System
 
-| ID | Requirement | Validation | Evidence | Result |
-|----|------------|------------|----------|--------|
-| **HRS-01 MCU** | SIWG917 MCU with FreeRTOS + interfaces | Verified via firmware execution, I2C, PWM, RTT logging | <img src="images/requirements/mcu.jpg" width="200"> | ✅ |
-| **HRS-02 Power** | Battery + 5V support + low power | Measured current (38 mA idle, 166 mA scanning) | <img src="images/requirements/battery.jpg" width="200"><br><img src="images/requirements/nominal_current.jpg" width="200"><br><img src="images/requirements/barcode_scan_current.jpg" width="200"> | ⚠️ |
-| **HRS-03 Sensors** | Temp + humidity via I2C | Verified via RTT logs | <img src="images/requirements/temp_humidity_readings.png" width="200"> | ✅ |
-| **HRS-04 Barcode** | UART barcode scanner | Verified scan → decode → log | <img src="images/requirements/barcode_scan.png" width="200"><br><img src="images/requirements/unknown_barcode.png" width="200"> | ✅ |
-| **HRS-05 Wireless** | BLE + Wi-Fi | Wi-Fi + MQTT working; BLE not implemented | — | ⚠️ |
-| **HRS-06 Actuation** | Servo + LEDs | Servo functional (external power), no LEDs | <img src="images/requirements/servo.jpg" width="200"><br><img src="images/requirements/servo_freshness_update.png" width="200"> | ⚠️ |
-| **HRS-07 Debug** | Logging + programming | SEGGER RTT logs verified | <img src="images/requirements/Segger_RTT.png" width="200"> | ✅ |
-| **HRS-08 Cost** | ≤ $30 | $71.74 with scanner | — | ❌ |
+The system shall operate from a single-cell Li-Ion battery...
+
+*** we had to use a power supply for 5V rail since we blew it out  
+- No low power states implemented  
+3.3 V boost✅  
+
+Power measurement (taken with an inline USB-C measuring device, which is verified with power supply readings)  
+- 38 mA, 0.196W nominal on USB-C  
+- 166 mA, 0.857W when barcode scanning on  
+
+<img src="images/requirements/battery.jpg" width="250">
+<img src="images/requirements/nominal_current.jpg" width="250">
+<img src="images/requirements/barcode_scan_current.jpg" width="250">
+
+---
+
+### HRS-03 Sensors
+
+Temperature and humidity sensor✅  
+
+<img src="images/requirements/temp_humidity_readings.png" width="300">
 
 ---
 
-### Software Requirements
+### HRS-04 Barcode Scanner
 
-| ID | Requirement | Validation | Evidence | Result |
-|----|------------|------------|----------|--------|
-| **SRS-01 Firmware** | FreeRTOS modular system | Verified task-based architecture | <img src="images/requirements/free_rtos.png" width="200"> | ✅ |
-| **SRS-02 Concurrency** | Event-driven architecture | Verified via task execution and logs | <img src="images/requirements/logs.png" width="200"> | ✅ |
-| **SRS-03 Persistence** | Data survives reset | Not implemented | — | ❌ |
-| **SRS-04 Barcode Logic** | Scan → update inventory | Verified via logs + system behavior | <img src="images/requirements/barcode_scan.png" width="200"><br><img src="images/requirements/inventory_item_struct.png" width="200"> | ✅ |
-| **SRS-05 BLE** | BLE support | Not implemented | — | ❌ |
-| **SRS-06 Sensors** | Sampling + freshness | Verified periodic readings | <img src="images/requirements/temp_humidity_readings.png" width="200"> | ✅ |
-| **SRS-07 Actuation** | Servo response | ~250 ms response time | <img src="images/requirements/servo_rtt.png" width="200"><br><img src="images/requirements/servo_freshness_update_nodered.png" width="200"> | ✅ |
-| **SRS-08 MQTT** | Publish + subscribe | Verified before Azure expired | <img src="images/requirements/logs.png" width="200"> | ⚠️ |
-| **SRS-09 Recipes** | Suggest meals | Not implemented | — | ❌ |
-| **SRS-10 Grocery List** | Generate list | Not implemented | — | ❌ |
-| **SRS-11 Low Power** | Sleep modes | Not implemented | — | ❌ |
-| **SRS-12 Logging** | Debug logs | Verified via RTT | <img src="images/requirements/logs.png" width="200"> | ✅ |
+UART barcode scanner✅  
+
+<img src="images/requirements/barcode_scan.png" width="250">
+<img src="images/requirements/unknown_barcode.png" width="250">
 
 ---
+
+### HRS-05 Wireless Communication
+
+Only used Wi-Fi  
+- Ran out of credits, so difficult to verify  
+
+---
+
+### HRS-06 Actuation & Indicators
+
+Servo motor✅  
+- 5V from power supply  
+- Only updates when freshness value changes  
+
+No status LEDs  
+
+<img src="images/requirements/servo.jpg" width="250">
+<img src="images/requirements/servo_freshness_update.png" width="250">
+
+---
+
+### HRS-07 Debug & Programming
+
+Implemented Segger RTT  
+
+<img src="images/requirements/Segger_RTT.png" width="300">
+
+---
+
+### HRS-08 Cost Constraint
+
+w/o barcode scanner: $4.79  
+W barcode scanner: $71.74  
+
+---
+
+## Software Requirements
+
+---
+
+### SRS-01 Firmware Platform
+
+The firmware shall run on FreeRTOS...
+
+<img src="images/requirements/free_rtos.png" width="300">
+
+---
+
+### SRS-02 Tasking & Concurrency Model
+
+The system shall use an event-driven architecture...
+
+<img src="images/requirements/logs.png" width="300">
+
+---
+
+### SRS-03 Data Model & Persistence
+
+Did not store inventory in nonvolatile memory  
+
+<img src="images/requirements/inventory_item_struct.png" width="300">
+
+---
+
+### SRS-04 Barcode Scan Behavior
+
+Verified barcode scan → update  
+
+<img src="images/requirements/barcode_scan.png" width="250">
+
+---
+
+### SRS-05 BLE Functionality
+
+Did not use BLE  
+
+---
+
+### SRS-06 Sensor Sampling & Freshness Computation
+
+Freshness Test✅  
+
+<img src="images/requirements/temp_humidity_readings.png" width="300">
+
+---
+
+### SRS-07 Actuation Logic
+
+Actuation Test✅ (~250 ms)  
+
+<img src="images/requirements/servo_rtt.png" width="250">
+<img src="images/requirements/servo_freshness_update_nodered.png" width="250">
+
+---
+
+### SRS-08 Wi-Fi / MQTT
+
+MQTT test: ran out of credits…  
+
+---
+
+### SRS-09 Dish Suggestion & Ratings
+
+Did not implement  
+
+---
+
+### SRS-10 Grocery List Generation
+
+Did not implement  
+
+---
+
+### SRS-11 Low Power Policy
+
+Did not implement  
+
+---
+
+### SRS-12 Debug & Logging
+
+Logs verified  
+
+<img src="images/requirements/logs.png" width="300">
+
+---
+
+### SRS-13 Acceptance Test Set
+
+- Barcode test✅  
+- Duplicate scan test✅  
+- Unknown barcode test✅  
+- Latency test: ???  
+- MQTT test: ran out of credits…  
+- Persistence Test: did not implement  
+- Freshness Test✅  
+- Actuation Test✅  
+
+<img src="images/requirements/barcode_scan.png" width="250">
 
 ### Key Validation Results
 
