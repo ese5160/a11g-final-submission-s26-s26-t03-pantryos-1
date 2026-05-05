@@ -172,7 +172,7 @@ Target power characteristics:
 
 The system shall demonstrate a minimum runtime of 24 hours.  
 
-**Validation / Notes (your original wording):**  
+**Validation:**  
 *** we had to use a power supply for 5V rail since we blew it out  
 - No low power states implemented  
 3.3 V boost✅  
