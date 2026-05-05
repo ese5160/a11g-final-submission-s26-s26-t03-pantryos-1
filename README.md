@@ -119,12 +119,6 @@ https://upenn-eselabs.365.altium.com/designs/folder-DC856870-9335-4574-956F-E6FD
 
 ## 3. Hardware & Software Requirements
 
-Remember those hardware and software requirements from earlier in the semester? It's now time to review if you hit those requirements or if you fell short. Go through each requirement and show if you met it or not.
-
-You’ll need to do validation testing to check these requirements. For example, if I wanted to validate my temperature sensor accuracy, I would compare it to a more accurate temperature measurement tool (say, a thermocouple attached to a multimeter). Then, I’d find the error between my device and the tool.
-
-Be honest with your requirements review period you will not lose points if you did not hit the requirements metrics as outlined. However, you must discuss how you tested these requirements and present data.
-
 ---
 
 ## Hardware Requirements
@@ -231,7 +225,7 @@ UART barcode scanner✅
 ### HRS-05 Wireless Communication
 
 **Description:**  
-The system shall support wireless communication using BLE and Wi-Fi...  
+The system shall support wireless communication using BLE and Wi-Fi.  
 
 **Validation:**  
 Only used Wi-Fi  
@@ -265,7 +259,7 @@ No status LEDs
 ### HRS-07 Debug & Programming
 
 **Description:**  
-The system shall include a hardware debug/programming port...  
+The system shall include a hardware debug/programming port.  
 
 **Validation:**  
 Implemented Segger RTT  
@@ -292,7 +286,7 @@ W barcode scanner: $71.74
 ### SRS-01 Firmware Platform
 
 **Description:**  
-The firmware shall run on FreeRTOS...  
+The firmware shall run on FreeRTOS.  
 
 <img src="images/requirements/free_rtos.png" width="300">
 
@@ -301,7 +295,7 @@ The firmware shall run on FreeRTOS...
 ### SRS-02 Tasking & Concurrency Model
 
 **Description:**  
-The system shall use an event-driven architecture...  
+The system shall use an event-driven architecture.  
 
 <img src="images/requirements/logs.png" width="300">
 
@@ -347,7 +341,7 @@ Actuation Test✅ (~250 ms)
 
 ### SRS-08 Wi-Fi / MQTT
 
-MQTT test: ran out of credits…  
+MQTT test: ran out of credits  
 
 ---
 
