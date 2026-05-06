@@ -285,6 +285,19 @@ W barcode scanner: $71.74
 
 **Description:**  
 The firmware shall run on FreeRTOS.  
+The firmware shall implement a modular architecture with at minimum:  
+- Sensor manager  
+- Barcode scanner handler  
+- BLE manager  
+- Wi-Fi communication manager  
+- HTTP server (optional)  
+- MQTT client  
+- Actuator controller  
+- Inventory record store  
+- Logging/debug module  
+
+**Validation:**  
+Verified task-based architecture and modular system implementation.
 
 <img src="images/requirements/free_rtos.png" width="300">
 
@@ -295,11 +308,44 @@ The firmware shall run on FreeRTOS.
 **Description:**  
 The system shall use an event-driven architecture.  
 
+Events include:  
+- Sensor timer events  
+- Barcode scan events  
+- BLE events  
+- HTTP request events  
+- MQTT publish/subscribe events  
+- Button press events  
+
+Tasks shall include:  
+- Sensor task  
+- Barcode input task  
+- Network communication task  
+- State machine task  
+- Logging task  
+
+Shared resources (e.g., I2C, network buffers) shall be protected via mutexes.
+
+**Validation:**  
+Verified via FreeRTOS task execution and logging behavior.
+
 <img src="images/requirements/logs.png" width="300">
 
 ---
 
 ### SRS-03 Data Model & Persistence
+
+**Description:**  
+Each inventory item shall be represented as a record containing:  
+- barcode (string)  
+- item name (optional/lookup-based)  
+- quantity (int)  
+- expiration date or timestamp  
+- freshness status  
+- last_updated timestamp  
+
+Persistence:  
+- Inventory database shall persist across reset using nonvolatile memory  
+- ≥95% of updates shall remain after power cycling  
 
 **Validation:**  
 Did not store inventory in nonvolatile memory  
@@ -310,18 +356,60 @@ Did not store inventory in nonvolatile memory
 
 ### SRS-04 Barcode Scan Behavior
 
+**Description:**  
+When a barcode is scanned:  
+- The system shall decode the barcode value and generate a scan event  
+- The system shall identify or look up the item associated with the barcode  
+
+If the item exists:  
+- Update quantity and timestamp  
+
+If the item is unknown:  
+- Flag for manual entry or fallback handling  
+
+Duplicate scans:  
+- Repeated scans within a short time window shall be handled safely  
+
+Scan latency:  
+- Inventory update shall occur within 2 seconds of scan  
+
+**Validation:**  
+Verified barcode scan → decode → update behavior  
+
 <img src="images/requirements/barcode_scan.png" width="250">
 
 ---
 
 ### SRS-05 BLE Functionality
 
+**Description:**  
+BLE may be used to broadcast limited system or inventory status.  
+
+- BLE advertising shall update periodically  
+- BLE updates shall reflect major system state changes  
+
+**Validation:**  
 Did not use BLE  
 
 ---
 
 ### SRS-06 Sensor Sampling & Freshness Computation
 
+**Description:**  
+The system shall sample sensors at least once per minute.  
+
+Freshness shall be computed using:  
+- Expiration timestamps  
+- Environmental sensor data (optional)  
+
+Freshness states:  
+- OK  
+- Expiring Soon  
+- Expired / Action Required  
+
+State updates shall occur within 60 seconds of threshold crossing.  
+
+**Validation:**  
 Freshness Test✅  
 
 <img src="images/requirements/temp_humidity_readings.png" width="300">
@@ -330,6 +418,16 @@ Freshness Test✅
 
 ### SRS-07 Actuation Logic
 
+**Description:**  
+Actuation shall occur when:  
+- A freshness state threshold is crossed, or  
+- A valid user/network command is received  
+
+Servo updates:  
+- Trigger only on valid state changes or commands  
+- Limited to ≤1 update per 60 seconds unless explicitly triggered  
+
+**Validation:**  
 Actuation Test✅ (~250 ms)  
 
 <img src="images/requirements/servo_rtt.png" width="250">
@@ -339,30 +437,64 @@ Actuation Test✅ (~250 ms)
 
 ### SRS-08 Wi-Fi / MQTT
 
+**Description:**  
+The system shall support MQTT communication.  
+
+The system shall:  
+- Publish:  
+  - Barcode scan events  
+  - Inventory updates  
+- Subscribe:  
+  - Remote control commands  
+
+Performance:  
+- State changes shall propagate within ≤ 3 seconds  
+- System shall reconnect automatically  
+
+**Validation:**  
 MQTT test: ran out of credits  
 
 ---
 
 ### SRS-09 Dish Suggestion & Ratings
 
+**Description:**  
+The system may suggest dishes based on available inventory.  
+
+**Validation:**  
 Did not implement  
 
 ---
 
 ### SRS-10 Grocery List Generation
 
+**Description:**  
+The system may generate a grocery list when inventory changes.  
+
+**Validation:**  
 Did not implement  
 
 ---
 
 ### SRS-11 Low Power Policy
 
+**Description:**  
+The system shall support low-power and connected modes.  
+
+**Validation:**  
 Did not implement  
 
 ---
 
 ### SRS-12 Debug & Logging
 
+**Description:**  
+When enabled, logs shall include:  
+- Sensor readings  
+- Barcode scan events  
+- Wi-Fi/MQTT events  
+
+**Validation:**  
 Logs verified  
 
 <img src="images/requirements/logs.png" width="300">
@@ -371,6 +503,18 @@ Logs verified
 
 ### SRS-13 Acceptance Test Set
 
+**Description:**  
+The system shall pass:  
+- Barcode test  
+- Duplicate scan test  
+- Unknown barcode test  
+- Latency test  
+- MQTT test  
+- Persistence test  
+- Freshness test  
+- Actuation test  
+
+**Validation:**  
 - Barcode test✅  
 - Duplicate scan test✅  
 - Unknown barcode test✅  
