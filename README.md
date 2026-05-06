@@ -411,8 +411,6 @@ Logs verified
 
 ### Final Device
 
-Your final project, including any casework or interfacing elements that make up the full project (3D prints, screens, buttons, etc)
-
 <img src="images/photos/final_device.jpg" width="400">
 
 ---
@@ -429,7 +427,7 @@ Your final project, including any casework or interfacing elements that make up 
 
 ### Thermal Analysis
 
-Thermal camera images while the board is running under load (you may use your Board Bringup Thermal image here!)
+Thermal camera images while the board is running under load 
 
 <img src="images/photos/thermal.jpg" width="400">
 
@@ -459,9 +457,11 @@ Thermal camera images while the board is running under load (you may use your Bo
 
 ### System Block Diagram
 
-Block diagram of your system (You may need to update this to reflect changes throughout the semester.)
+**Simple Block Diagram**  
+<img src="images/photos/block_diagram_1.png" width="450">
 
-<img src="images/photos/block_diagram.png" width="500">
+**Detailed Block Diagram**  
+<img src="images/photos/block_diagram_2.png" width="450">
 
 ## 5. Codebase
 
